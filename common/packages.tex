@@ -1,0 +1,155 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{hyperref} % must be loaded before glossaries-extra
+
+% bibliography
+\usepackage[hyperref=true,backref=true,backend=biber,maxbibnames=9,maxcitenames=2,style=numeric,citestyle=numeric-comp,sorting=none,urldate=long]{biblatex} % hyperref uses links, backref goes back to citations, uses biber as backend, with 9 names at most in bibliography and 2 in citations, citing using numbers, and sorting in citation order
+% sorting can be also ydnt for year descending, name, title or ynt for ascending year
+
+\usepackage{adjustbox} % to resize boxes by keeping the same aspect ratio
+\usepackage{algorithm} % algorithm environment
+%\PassOptionsToPackage{noend}{algpseudocode}% comment out if want end's to show
+\usepackage{algpseudocode} % improved pseudo-code
+\usepackage{amsfonts}               %  AMS mathematical fonts
+\usepackage{amsmath}
+\usepackage{amssymb}                %  AMS mathematical symbols
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[section]
+\usepackage{bm}                     %  black/bold mathematical symbols
+\usepackage{booktabs}               %  better tables
+\usepackage{calc}
+\usepackage[labelfont=bf]{caption} % font=footnotesize % to have reduced caption font size
+\usepackage{chronosys} % to draw timelines
+\usepackage{csquotes}
+\usepackage{enumitem} %left align the bulleted points
+\usepackage{geometry}
+\usepackage[%
+    toc, % puts the link in the ToC record, % to use bib2gls
+    abbreviations, % to load abbreviations / acronyms
+    symbols, % to load symbols
+    nonumberlist, % to avoid printing the numbers of the references in the acronyms page
+    style=index, % in-line acronyms
+]{glossaries-extra}
+\usepackage{graphicx}               %  post-script images
+%\usepackage{iwona} % extra fonts, substitute standard ones
+\usepackage{listings} % to insert formatted code
+\usepackage{lipsum} % for lorem ipsum text, not needed in the real work
+\usepackage{makecell} % to change dimensions of cells, for math cases
+\usepackage{mathtools} % for additional commands
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\usepackage{mfirstuc} % to have capitalization capabilities
+\usepackage[final]{microtype}      % microtypography, final lets latex use it also in bibliography
+\usepackage{multirow} % to allow for cells covering more than 1 row in tables
+\newcommand{\STAB}[1]{\begin{tabular}{@{}c@{}}#1\end{tabular}}
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+%\usepackage[lofdepth,lotdepth]{subfig}
+\usepackage{ragged2e} % for justifying text
+\usepackage{scrextend} % for multiple references to the same footnote
+\usepackage{siunitx} % support for SI units of measurement and number typesetting
+\usepackage[figuresright]{rotating}
+%\usepackage{subfig}
+\usepackage{subcaption} %  subfigure compatibility
+\usepackage{svg} % for svg support, works only if inkscape is installed, default for Overleaf v2
+\usepackage{tabularx} % equal-width columns in tables
+\usepackage{textcomp} % extra fonts and symbols
+\usepackage{url}            % simple URL typesetting
+\usepackage{verbatim} % for extended verbatim support
+\usepackage{xcolor} % to define colors and use standard CSS names add dvipsnames as option, but it clashes with xcolor loaded in toptesi, pay attention that if it goes in conflict with tikz/beamer, simply use \documentclass[usenames,dvipsnames]{beamer}, along with other custom options when defining the document class
+\usepackage{xpatch}
+
+
+
+
+
+
+% begin vertical rule patch for algorithmicx (http://tex.stackexchange.com/questions/144840/vertical-loop-block-lines-in-algorithmicx-with-noend-option)
+\makeatletter
+% start with some helper code
+% This is the vertical rule that is inserted
+\newcommand*{\algrule}[1][\algorithmicindent]{\makebox[#1][l]{\hspace*{.5em}\vrule height .75\baselineskip depth .25\baselineskip}}%
+
+\newcount\ALG@printindent@tempcnta
+\def\ALG@printindent{%
+    \ifnum \theALG@nested>0% is there anything to print
+        \ifx\ALG@text\ALG@x@notext% is this an end group without any text?
+            % do nothing
+            \addvspace{-3pt}% FUDGE for cases where no text is shown, to make the rules line up
+        \else
+            \unskip
+            % draw a rule for each indent level
+            \ALG@printindent@tempcnta=1
+            \loop
+                \algrule[\csname ALG@ind@\the\ALG@printindent@tempcnta\endcsname]%
+                \advance \ALG@printindent@tempcnta 1
+            \ifnum \ALG@printindent@tempcnta<\numexpr\theALG@nested+1\relax% can't do <=, so add one to RHS and use < instead
+            \repeat
+        \fi
+    \fi
+    }%
+\usepackage{etoolbox}
+% the following line injects our new indent handling code in place of the default spacing
+\patchcmd{\ALG@doentity}{\noindent\hskip\ALG@tlm}{\ALG@printindent}{}{\errmessage{failed to patch}}
+\makeatother
+% end vertical rule patch for algorithmicx
+
+
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argsup}{arg\,sup}
+\DeclareMathOperator*{\arginf}{arg\,inf}
+\DeclarePairedDelimiterX{\dotp}[2]{\langle}{\rangle}{#1, #2}
+
+
+
+\newcommand*{\inlineimg}[1]{%
+    \raisebox{-.3\baselineskip}{%
+        \includegraphics[
+        height=\baselineskip,
+        width=\baselineskip,
+        keepaspectratio,
+        ]{#1}%
+    }%
+}
+
+
+
+% for not letting footnotes break in two pages
+\interfootnotelinepenalty=1000000
+
+
+
+
+
+%%%%%%%%%% NEW GLOSSARY STYLE
+\newglossarystyle{myglosses}{
+    \renewenvironment{theglossary}{
+        \longtable{r l}
+    }{
+        \endlongtable
+    }
+    \renewcommand*{\glossaryheader}{}
+    \renewcommand*{\glsgroupheading}[1]{}
+    \renewcommand*{\glsgroupskip}{}
+    \renewcommand*{\glsclearpage}{} 
+
+     % set how each entry should appear:
+      \renewcommand*{\glossentry}[2]{
+        \glstarget{##1}{\textsc{\glossentryname{##1}}}
+        &
+        \glossentrydesc{##1} \\
+    }
+    \renewcommand*{\subglossentry}[3]{%
+        \glossentry{##2}{##3}
+    }
+}

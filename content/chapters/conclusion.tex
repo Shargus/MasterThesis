@@ -1,0 +1,30 @@
+\chapter{Conclusion}
+\label{sec:conclusion}
+
+In this work, a novel data-driven approach to Li-ion battery pack SOH estimation has been proposed. Due to a lack of publicly available datasets of EV field data, a Simulink model of an EV has been built and parametrized according to the technical specifications of two real EVs (VW e-up!, VW e-Golf). The model has been used to simulate a high number of driving sessions in different driving conditions, collecting synthetically-generated EV field data. Specifically, the resulting synthetic dataset consists of voltage, current and SOC measurements, recorded at a high sampling rate. Multiple fixed-length time windows were extracted from each synthetic driving session and three feature extraction methods (\textsc{MiniRocket}, OLS regression, Theil-Sen regression) were applied on them, thus obtaining a static representation of time series data. The transformed data was finally used to train three different regression models (ridge regression, random forest, feed-forward neural network).
+
+The proposed procedure has been tested both on a held-out test set of synthetic data and on a real dataset of EV monitoring data, acquired from a private EV fleet management company. The models generally achieved a low MAE on synthetic data (as low as 0.75\%, obtained with Theil-Sen feature extraction followed by a random forest regression model). Moreover, the procedure has been shown to be very fast in making predictions (with at most half a second per time window), making it suitable for monitoring SOH in real-time. However, performances on real data were underwhelming. Supposedly, the poor generalization capabilities exhibited by the trained models are due to the low quantity, quality and/or diversity of the synthetically generated data, perhaps indicating that the Simulink EV model is not as close to reality as expected. Despite the promising results achieved on synthetic data, further work is needed to improve the performances of the proposed SOH estimation procedure on real EV data.
+
+\section{Future work}
+\label{sec:future_work}
+Even though the performances of the procedure applied on real data were below expectations, we claim that there exist many possible improvements to our approach, which could theoretically enhance the regression models' generalization ability.
+
+The main improvements regard the quantity, quality and diversity of the data used for training. Specifically, we may:
+\begin{itemize}
+    \item use the Simulink EV model to further generate synthetic data in more diverse driving conditions (e.g.: simulating more driving cycles and finer battery aging levels), thus increasing the size of the training set;
+    \item increase the sampling rate. We used a sampling rate of 5 Hz (i.e. a measurement every 0.2 seconds), but higher sampling rates can be tested, enhancing the reliability of the measurements at the price of a higher computational cost for feature extraction;
+    \item implement data augmentation techniques specific for time series data \cite{da_ts} to virtually increase the size of the training set;
+    \item enhance the reliability of the Simulink EV model. For example, we could model the battery pack at the module or cell level (instead of approximating it to a single high-voltage battery cell), and we could explicitly implement the thermal management/cooling system of an EV (instead of relying on a simple battery thermal model). However, this is viable only upon acquiring more fine-grained EV specifications, such as the specific electrical and geometrical layout of the cells inside the battery pack, its positioning inside the car, the specific features of the BMS and of the battery thermal management system (BTMS) in use;
+    \item improve the thermal model of the current Simulink EV model, so that the temperature dependence on the SOH is correctly accounted for. This improvement would make it possible to exploit also the extracted temperature measurements to predict SOH.
+    \item train the regression models on a "hybrid" training set, composed of both synthetically-generated and real data.
+    \item acquire new real data, over a wider time period (i.e. a higher amount of different SOH values between 100\% and 80\%). In fact, with a sufficiently extensive and representative amount of real data we could entirely avoid generating synthetic training data.
+\end{itemize}
+
+Moreover, also the proposed algorithms could be improved. We may:
+\begin{itemize}
+    \item extract longer time windows, in order to capture a wider set of operating points in different driving conditions. This comes at the cost of an increased computational time for applying feature extraction.
+    \item with respect to the feature extraction method based on linear regression in the V-I-SOC space, experiment with different types of regression other than the linear one (e.g. Bayesian linear regression, polynomial regression).
+    \item experiment with other regression models, such as support vector regression, Gaussian process regression and deep neural networks. Interestingly, there exist machine learning models which can at the same time learn how to extract relevant features from time series data and how to use them to perform extrinsic regression. Among them, a CNN known as InceptionTime \cite{inceptiontime, TSER} achieves state of the art performances on many TSER datasets. Using deep neural networks would also enable the use of transfer learning \cite{transferlearning}, a widely used methodology for increasing a model's generalization ability with just a little amount of target-domain data.
+\end{itemize}
+
+% THE END.
